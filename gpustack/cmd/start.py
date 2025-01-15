@@ -166,6 +166,12 @@ def setup_start_cmd(subparsers: argparse._SubParsersAction):
 
     group = parser_server.add_argument_group("Worker settings")
     group.add_argument(
+        "--preferred-interface",
+        type=str,
+        help="Preferred network interface to use.",
+        default=get_gpustack_env("PREFERRED_INTERFACE"),
+    )
+    group.add_argument(
         "-s",
         "--server-url",
         type=str,

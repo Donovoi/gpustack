@@ -64,6 +64,7 @@ class Config(BaseSettings):
     # Server options
     host: Optional[str] = "0.0.0.0"
     port: Optional[int] = None
+    preferred_interface: Optional[str] = None
     database_url: Optional[str] = None
     disable_worker: bool = False
     bootstrap_password: Optional[str] = None
@@ -79,6 +80,7 @@ class Config(BaseSettings):
 
     # Worker options
     server_url: Optional[str] = None
+    preferred_interface: Optional[str] = None
     worker_ip: Optional[str] = None
     worker_name: Optional[str] = None
     disable_metrics: bool = False

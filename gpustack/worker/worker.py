@@ -14,7 +14,7 @@ from gpustack.config import Config
 from gpustack.schemas.workers import SystemReserved, WorkerUpdate
 from gpustack.server import catalog
 from gpustack.utils import file, platform
-from gpustack.utils.network import get_first_non_loopback_ip
+from gpustack.utils.network import get_first_non_loopback_ip, get_network_ip
 from gpustack.client import ClientSet
 from gpustack.logging import setup_logging
 from gpustack.utils.process import add_signal_handlers_in_loop
@@ -220,7 +220,9 @@ class Worker:
         if workers is not None and len(workers.items) != 0:
             worker = workers.items[0]
 
-        current_ip = get_first_non_loopback_ip()
+        current_ip = get_network_ip(
+            preferred_interface=self._config.preferred_interface
+        )
         if current_ip != self._worker_ip:
             logger.info(f"Worker IP changed from {self._worker_ip} to {current_ip}")
             if worker is None:

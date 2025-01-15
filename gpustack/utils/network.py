@@ -33,6 +33,34 @@ def get_first_non_loopback_ip():
     raise Exception("No non-loopback IP address found.")
 
 
+def get_network_ip(preferred_interface=None):
+    """
+    Get IP address based on preferred network interface.
+
+    Args:
+        preferred_interface (str): Preferred interface name (e.g., 'tailscale0' or 'eth0')
+    """
+    if preferred_interface:
+        # Try preferred interface first
+        for interface, addrs in psutil.net_if_addrs().items():
+            if interface == preferred_interface:
+                for addr in addrs:
+                    if addr.family == socket.AF_INET:
+                        return addr.address
+
+    # Fall back to any non-loopback address
+    for interface, addrs in psutil.net_if_addrs().items():
+        for addr in addrs:
+            if addr.family == socket.AF_INET:
+                ip_address = addr.address
+                if not ip_address.startswith("127.") and not ip_address.startswith(
+                    "169.254."
+                ):
+                    return ip_address
+
+    raise Exception("No suitable IP address found.")
+
+
 def get_free_port(start=40000, end=41024) -> int:
     while True:
         port = random.randint(start, end)
